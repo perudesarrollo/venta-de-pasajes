@@ -14,7 +14,7 @@ Para este proyecto de venta de pasajes, identificaremos los siguientes microserv
 
 2. Desarrollo microservicios
 *    Servicio de búsqueda y reserva de ruta
-*    Servicio de búsqueda y reserva de ruta
+*    Servicio de gestión de equipaje
 
 ```
 venta-de-pasajes/

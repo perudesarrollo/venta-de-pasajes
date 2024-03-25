@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: search-service
+  template:
+    metadata:
+      labels:
+        app: search-service
+    spec:
+      containers:
+      - name: search-service
+        image: search-service-image:tag
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_URL
+          value: "mongodb://mongodb:27017"
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-service
+spec:
+  selector:
+    app: search-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baggage-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: baggage-service
+  template:
+    metadata:
+      labels:
+        app: baggage-service
+    spec:
+      containers:
+      - name: baggage-service
+        image: baggage-service-image:tag
+        ports:
+        - containerPort: 8081
+        env:
+        - name: MONGO_URL
+          value: "mongodb://mongodb:27017"
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: baggage-service
+spec:
+  selector:
+    app: baggage-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "df204ce4-c420-454f-909f-49fd128c5ef5",
+		"name": "venta-de-pasajes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49361"
+	},
+	"item": [
+		{
+			"name": "1. Buscar Rutas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json()",
+							"pm.environment.set(\"route_id\", json[0].id)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/search?origin=Lima&destination=Arequipa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "origin",
+							"value": "Lima"
+						},
+						{
+							"key": "destination",
+							"value": "Arequipa"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Typos de equipaje",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json()",
+							"const baggage_name = json[0] ? json[0].name : json.name",
+							"pm.environment.set(\"baggage_type\", baggage_name)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/baggage/types",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"baggage",
+						"types"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Maleta mediana",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Agregar Equipaje",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json()",
+							"pm.environment.set(\"baggage_reservation_id\", json.baggage_reservation_id)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reservation_id\": \"{{reservation_id}}\",\n    \"type\": \"{{baggage_type}}\",\n    \"weight\": 12.5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/baggage/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"baggage",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Actualizar Reserva Equipaje",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"baggage_reservation_id\": \"{{baggage_reservation_id}}\",\n    \"baggage_type\": \"{{baggage_type}}\",\n    \"quantity\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/baggage/reserve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"baggage",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
